@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,7 +10,7 @@ import java.util.Map;
  */
 public class OfflineMapsService implements MapsService {
     // 장소 이름 → {위도, 경도} (대략적인 좌표)
-    private Map<String, double[]> knownPlaces = new HashMap<>();
+    private Map<String, double[]> knownPlaces = new LinkedHashMap<>();  // 등록한 순서대로 검색
     private Map<String, String> knownAddresses = new HashMap<>();
 
     public OfflineMapsService() {
@@ -38,6 +39,19 @@ public class OfflineMapsService implements MapsService {
         add("협재해수욕장", "제주 제주시 한림읍 협재리", 33.3940, 126.2397);
         add("한라산", "제주 서귀포시 토평동", 33.3617, 126.5292);
         add("제주국제공항", "제주 제주시 공항로 2", 33.5104, 126.4914);
+
+        // 숙소 (숙소 설정에서 검색용, 좌표는 대략적인 값)
+        add("롯데호텔서울", "서울 중구 을지로 30", 37.5651, 126.9809);
+        add("웨스틴조선서울", "서울 중구 소공로 106", 37.5644, 126.9800);
+        add("서울신라호텔", "서울 중구 동호로 249", 37.5559, 127.0057);
+        add("그랜드하얏트서울", "서울 용산구 소월로 322", 37.5397, 126.9972);
+        add("롯데호텔월드", "서울 송파구 올림픽로 240", 37.5113, 127.0980);
+        add("파라다이스호텔부산", "부산 해운대구 해운대해변로 296", 35.1600, 129.1640);
+        add("웨스틴조선부산", "부산 해운대구 동백로 67", 35.1560, 129.1520);
+        add("롯데호텔부산", "부산 부산진구 가야대로 772", 35.1567, 129.0563);
+        add("롯데호텔제주", "제주 서귀포시 중문관광로72번길 35", 33.2485, 126.4105);
+        add("신라호텔제주", "제주 서귀포시 중문관광로72번길 75", 33.2477, 126.4080);
+        add("메종글래드제주", "제주 제주시 노연로 80", 33.4855, 126.4881);
     }
 
     private void add(String name, String address, double lat, double lng) {
@@ -48,6 +62,12 @@ public class OfflineMapsService implements MapsService {
     @Override
     public Place searchPlace(String query) {
         String q = query.replace(" ", "");
+        if (q.isEmpty()) return null;
+        // 이름이 정확히 같은 장소를 먼저 찾는다 (예: "롯데호텔서울" vs "롯데호텔부산")
+        if (knownPlaces.containsKey(q)) {
+            double[] ll = knownPlaces.get(q);
+            return new Place(q, knownAddresses.get(q), ll[0], ll[1], 60, "기타", "");
+        }
         for (String name : knownPlaces.keySet()) {
             // 공백을 무시하고, 이름이 서로 포함되면 같은 장소로 본다
             if (name.contains(q) || q.contains(name)) {
