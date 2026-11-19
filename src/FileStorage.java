@@ -11,19 +11,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 여행 데이터를 텍스트 파일로 저장하고 불러온다.
- * 한 줄에 한 항목, 값은 탭(\t)으로 구분한다.
- *
- * TRIP    id  제목  지역  시작일  일수  하루시작(분)  하루종료(분)
- * LODGING 이름 주소 위도 경도
- * PLACE   이름 주소 위도 경도 체류(분) 카테고리 메모 방문완료(true/false)
- * ITIN    출처
- * DAY     일차번호 숙소복귀이동(분)
- * VISIT   장소번호 이동(분) 도착(분) 출발(분)
- * UNSCHED 장소번호
- * END
- */
 public class FileStorage {
     private final File file;
 
@@ -68,7 +55,7 @@ public class FileStorage {
     }
 
     public void load(TripManager manager) throws IOException {
-        if (!file.exists()) return;  // 처음 실행이면 불러올 것이 없다
+        if (!file.exists()) return;
 
         try (BufferedReader r = new BufferedReader(new InputStreamReader(
                 new FileInputStream(file), StandardCharsets.UTF_8))) {
@@ -94,7 +81,6 @@ public class FileStorage {
                     case "PLACE":
                         Place place = new Place(f[1], f[2], Double.parseDouble(f[3]),
                                 Double.parseDouble(f[4]), Integer.parseInt(f[5]), f[6], f[7]);
-                        // 방문 완료 칸은 나중에 추가된 항목이라, 예전 파일에는 없을 수 있다
                         place.setVisited(f.length > 8 && Boolean.parseBoolean(f[8]));
                         trip.addPlace(place);
                         break;
@@ -115,12 +101,11 @@ public class FileStorage {
                         it.addUnscheduled(places.get(Integer.parseInt(f[1])));
                         break;
                     case "END":
-                        trip.setItinerary(it);   // 장소를 다 넣은 뒤에 일정을 붙인다
+                        trip.setItinerary(it);
                         manager.addLoadedTrip(trip);
                         trip = null;
                         break;
                     default:
-                        // 알 수 없는 줄은 무시
                 }
             }
         } catch (RuntimeException e) {
@@ -128,7 +113,6 @@ public class FileStorage {
         }
     }
 
-    /** 값들을 탭으로 이어 한 줄로 쓴다. 값 안의 탭/줄바꿈은 공백으로 바꾼다. */
     private void writeLine(BufferedWriter w, Object... values) throws IOException {
         List<String> parts = new ArrayList<>();
         for (Object v : values) {

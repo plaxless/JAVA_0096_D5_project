@@ -6,10 +6,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
-/**
- * 여행 일정 플래너 - 콘솔 버전 (프로그램 시작점, 메뉴 화면 담당).
- * 지도 기능은 오프라인 모드(대표 관광지 + 직선거리 추정)로 동작한다.
- */
 public class TravelPlannerApp {
     private static final String DATA_FILE = "data/trips.txt";
 
@@ -28,15 +24,12 @@ public class TravelPlannerApp {
         new TravelPlannerApp(new OfflineMapsService()).run();
     }
 
-    // ===================== 메인 메뉴 =====================
-
     public void run() {
         try {
             storage.load(manager);
         } catch (IOException e) {
             System.out.println("데이터 불러오기 실패: " + e.getMessage());
         }
-        // 정상 종료든 Ctrl+C 든 프로그램이 끝날 때 자동 저장
         Runtime.getRuntime().addShutdownHook(new Thread(this::save));
 
         System.out.println("========================================");
@@ -64,7 +57,7 @@ public class TravelPlannerApp {
                 case 6: searchMenu(); break;
                 case 0:
                     System.out.println("프로그램을 종료합니다.");
-                    return;   // main 이 끝나면 shutdown hook 이 저장한다
+                    return;
                 default: System.out.println("메뉴 번호를 다시 입력하세요.");
             }
         }
@@ -175,8 +168,6 @@ public class TravelPlannerApp {
         for (Trip t : list) System.out.println(t);
     }
 
-    // ===================== 여행 상세 메뉴 =====================
-
     private void openTrip() {
         Trip trip = chooseTrip();
         if (trip == null) return;
@@ -207,7 +198,6 @@ public class TravelPlannerApp {
         }
     }
 
-    /** 지도에서 장소를 검색한다. 못 찾으면 좌표를 직접 입력받는다. */
     private Place findPlace(String prompt) {
         String query = readLine(prompt);
         if (query.isEmpty()) return null;
@@ -326,17 +316,14 @@ public class TravelPlannerApp {
         trip.getItinerary().print(trip.getLodging());
     }
 
-    // ===================== 입력 도우미 =====================
-
     private String readLine(String prompt) {
         System.out.print(prompt);
-        if (!scanner.hasNextLine()) {   // 입력이 끝났으면(파일 입력 등) 종료
+        if (!scanner.hasNextLine()) {
             System.exit(0);
         }
         return scanner.nextLine().trim();
     }
 
-    /** 정수 입력. 빈 입력이면 기본값, 숫자가 아니면 다시 묻는다. */
     private int readInt(String prompt, int defaultValue) {
         while (true) {
             String s = readLine(prompt);
@@ -369,7 +356,6 @@ public class TravelPlannerApp {
         }
     }
 
-    /** "HH:mm" 시각 입력 → 자정부터 분. 빈 입력이면 기본값. */
     private int readTime(String prompt, int defaultMin) {
         while (true) {
             String s = readLine(prompt);

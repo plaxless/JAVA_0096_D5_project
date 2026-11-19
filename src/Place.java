@@ -1,16 +1,12 @@
-/**
- * 여행지(방문할 장소) 하나를 나타내는 클래스.
- * 위도/경도는 동선(이동 시간) 계산에 사용된다.
- */
 public class Place {
-    private String name;        // 장소 이름 (예: 경복궁)
-    private String address;     // 주소
-    private double lat;         // 위도
-    private double lng;         // 경도
-    private int stayMinutes;    // 머무를 시간(분)
-    private String category;    // 분류 (관광, 맛집, 카페, 쇼핑 ...)
-    private String memo;        // 메모
-    private boolean visited;    // 방문 완료 여부 (GUI 의 체크박스로 표시)
+    private String name;
+    private String address;
+    private double lat;
+    private double lng;
+    private int stayMinutes;
+    private String category;
+    private String memo;
+    private boolean visited;
 
     public Place(String name, String address, double lat, double lng,
                  int stayMinutes, String category, String memo) {
@@ -34,7 +30,6 @@ public class Place {
 
     public int getStayMinutes() { return stayMinutes; }
     public void setStayMinutes(int stayMinutes) {
-        // 체류 시간은 0분 이상이어야 한다
         this.stayMinutes = Math.max(0, stayMinutes);
     }
 

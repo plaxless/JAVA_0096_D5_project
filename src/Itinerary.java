@@ -1,11 +1,10 @@
 import java.util.ArrayList;
 import java.util.List;
 
-/** 동선 최적화 결과로 만들어진 전체 여행 일정. */
 public class Itinerary {
     private List<DayPlan> days = new ArrayList<>();
-    private List<Place> unscheduled = new ArrayList<>(); // 시간이 모자라 일정에 못 넣은 장소
-    private String sourceName;                           // 이동 시간을 계산한 방법 (오프라인 추정)
+    private List<Place> unscheduled = new ArrayList<>();
+    private String sourceName;
 
     public Itinerary(String sourceName) {
         this.sourceName = sourceName;
@@ -18,7 +17,6 @@ public class Itinerary {
     public List<Place> getUnscheduled() { return unscheduled; }
     public String getSourceName() { return sourceName; }
 
-    /** 일정을 보기 좋게 콘솔에 출력한다. */
     public void print(Place lodging) {
         System.out.println("(이동 시간 출처: " + sourceName + ")");
         for (DayPlan day : days) {

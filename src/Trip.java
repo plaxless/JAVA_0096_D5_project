@@ -2,18 +2,17 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-/** 여행 하나 (여행 기본 정보 + 가고 싶은 장소 목록 + 만들어진 일정). */
 public class Trip {
     private int id;
-    private String title;          // 여행 이름 (예: 부산 2박 3일)
-    private String destination;    // 도시/지역 (예: 부산)
+    private String title;
+    private String destination;
     private LocalDate startDate;
-    private int days;              // 여행 일수
-    private int dayStartMin;       // 하루 일정 시작 시각 (분)
-    private int dayEndMin;         // 하루 일정 종료 시각 (분)
-    private Place lodging;         // 숙소 (없으면 null)
+    private int days;
+    private int dayStartMin;
+    private int dayEndMin;
+    private Place lodging;
     private List<Place> places = new ArrayList<>();
-    private Itinerary itinerary;   // 아직 만들지 않았으면 null
+    private Itinerary itinerary;
 
     public Trip(int id, String title, String destination, LocalDate startDate,
                 int days, int dayStartMin, int dayEndMin) {
@@ -26,10 +25,9 @@ public class Trip {
         this.dayEndMin = dayEndMin;
     }
 
-    // ----- 장소 관리 -----
     public void addPlace(Place p) {
         places.add(p);
-        itinerary = null;  // 장소가 바뀌면 기존 일정은 다시 만들어야 한다
+        itinerary = null;
     }
 
     public Place removePlace(int index) {
@@ -39,12 +37,10 @@ public class Trip {
 
     public List<Place> getPlaces() { return places; }
 
-    /** 장소 정보(체류 시간 등)가 바뀌었을 때 호출: 기존 일정 무효화 */
     public void invalidateItinerary() { itinerary = null; }
 
     public LocalDate getEndDate() { return startDate.plusDays(days - 1); }
 
-    // ----- getter / setter -----
     public int getId() { return id; }
 
     public String getTitle() { return title; }
