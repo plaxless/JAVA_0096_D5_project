@@ -1,22 +1,14 @@
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.Properties;
 import java.util.Scanner;
 import java.util.Set;
 
 /**
  * 여행 일정 플래너 - 콘솔 버전 (프로그램 시작점, 메뉴 화면 담당).
- *
- * Google Maps API 키는 코드에 넣지 않고 아래 순서로 찾는다.
- *  1) 환경 변수 GOOGLE_MAPS_API_KEY
- *  2) 실행 폴더의 config.properties 파일의 google.maps.api.key 항목
- * 키가 없으면 오프라인 모드(대표 관광지 + 직선거리 추정)로 동작한다.
+ * 지도 기능은 오프라인 모드(대표 관광지 + 직선거리 추정)로 동작한다.
  */
 public class TravelPlannerApp {
     private static final String DATA_FILE = "data/trips.txt";
@@ -33,25 +25,7 @@ public class TravelPlannerApp {
     }
 
     public static void main(String[] args) {
-        String key = loadApiKey();
-        MapsService maps = (key == null) ? new OfflineMapsService() : new GoogleMapsService(key);
-        new TravelPlannerApp(maps).run();
-    }
-
-    /** API 키 찾기 (GUI 버전에서도 같이 쓰므로 private 이 아니다) */
-    static String loadApiKey() {
-        String key = System.getenv("GOOGLE_MAPS_API_KEY");
-        if (key != null && !key.isBlank()) return key.trim();
-        try (InputStreamReader in = new InputStreamReader(
-                new FileInputStream("config.properties"), StandardCharsets.UTF_8)) {
-            Properties props = new Properties();
-            props.load(in);
-            key = props.getProperty("google.maps.api.key");
-            if (key != null && !key.isBlank()) return key.trim();
-        } catch (IOException e) {
-            // 설정 파일이 없으면 오프라인 모드
-        }
-        return null;
+        new TravelPlannerApp(new OfflineMapsService()).run();
     }
 
     // ===================== 메인 메뉴 =====================
@@ -68,9 +42,6 @@ public class TravelPlannerApp {
         System.out.println("========================================");
         System.out.println("   여행 일정 플래너 (지도: " + maps.getName() + ")");
         System.out.println("========================================");
-        if (maps instanceof OfflineMapsService) {
-            System.out.println("※ API 키가 없어 오프라인 모드로 실행합니다. (README 참고)");
-        }
         System.out.println("저장된 여행 " + manager.getAllTrips().size() + "개를 불러왔습니다.");
 
         while (true) {

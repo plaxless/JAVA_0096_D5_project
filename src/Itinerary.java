@@ -5,7 +5,7 @@ import java.util.List;
 public class Itinerary {
     private List<DayPlan> days = new ArrayList<>();
     private List<Place> unscheduled = new ArrayList<>(); // 시간이 모자라 일정에 못 넣은 장소
-    private String sourceName;                           // 이동 시간을 계산한 방법 (Google / 오프라인 추정)
+    private String sourceName;                           // 이동 시간을 계산한 방법 (오프라인 추정)
 
     public Itinerary(String sourceName) {
         this.sourceName = sourceName;

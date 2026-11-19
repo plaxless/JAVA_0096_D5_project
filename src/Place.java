@@ -4,7 +4,7 @@
  */
 public class Place {
     private String name;        // 장소 이름 (예: 경복궁)
-    private String address;     // 주소 (지도 API 검색 결과)
+    private String address;     // 주소
     private double lat;         // 위도
     private double lng;         // 경도
     private int stayMinutes;    // 머무를 시간(분)

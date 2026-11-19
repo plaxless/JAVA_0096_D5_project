@@ -3,7 +3,7 @@ import java.util.List;
 
 /**
  * 지도 기능(장소 검색, 이동 시간 계산)을 제공하는 인터페이스.
- * Google Maps 버전과 오프라인(직선거리 추정) 버전이 이 인터페이스를 구현한다.
+ * 현재는 오프라인(직선거리 추정) 버전이 이 인터페이스를 구현한다.
  * → 프로그램의 나머지 부분은 어떤 구현을 쓰는지 몰라도 된다 (다형성).
  */
 public interface MapsService {
@@ -20,7 +20,7 @@ public interface MapsService {
     /** 화면에 보여줄 서비스 이름 */
     String getName();
 
-    // ----- 두 구현이 함께 쓰는 직선거리 기반 추정 -----
+    // ----- 직선거리 기반 추정 -----
 
     /** 두 좌표 사이 직선거리(km) - 하버사인 공식 */
     static double distanceKm(Place a, Place b) {

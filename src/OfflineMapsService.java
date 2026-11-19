@@ -3,10 +3,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * API 키가 없을 때 쓰는 오프라인 지도 서비스.
+ * 오프라인 지도 서비스 (외부 API 없이 동작).
  * - 장소 검색: 미리 넣어 둔 대표 관광지 좌표에서 찾는다.
  * - 이동 시간: 직선거리로 추정한다.
- * 키 없이도 프로그램 흐름을 시연/테스트할 수 있게 해 준다.
  */
 public class OfflineMapsService implements MapsService {
     // 장소 이름 → {위도, 경도} (대략적인 좌표)
